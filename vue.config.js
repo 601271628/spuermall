@@ -1,15 +1,16 @@
 
 //取文件别名
-module.exports={
-    configureWebpack:{
-        reslove:{
-            alias:{
-                'assets':'@/assets',
-                'common':'@/common',
-                'components':'@/components',
-                'network':'@/network',
-                'views':'@/views'
-            }
-        }
+module.exports = {
+  configureWebpack: {
+    resolve:{
+      extensions:[],
+      alias:{
+        'assets':'./src/assets',   //@/assets
+        'common':'./src/common',
+        'components':'./src/components',
+        'network':'./src/network',
+        'views':'./src/views',
+      }
     }
+  }
 }

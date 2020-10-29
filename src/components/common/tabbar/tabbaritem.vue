@@ -20,15 +20,17 @@ export default {
   },
   computed:{
     isShow(){
+      // console.log('aaaaa');
       return (this.$route.path == this.path)/************************************ */
     },
     activeStyle(){
+      // console.log('bbbbb');
       return this.isShow?{color:this.activecolor} : {}
     }
   },
   methods:{
     itemclick(){
-      this.$router.replace(this.path).catch(err=>{err})
+      this.$router.replace(this.path)//.catch(err=>{err})
       // document.title=this.$route.meta.title  在indexjs中改 路径变就改
     }
   }
