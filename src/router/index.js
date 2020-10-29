@@ -6,7 +6,6 @@ const cart=()=>import ('views/cart/cart.vue')
 const profile=()=>import ('views/profile/profile.vue')
 Vue.use(Router)
 
-
 const router= new Router({
   mode:'history',
   linkActiveClass:'active',
