@@ -26,5 +26,7 @@ export default {
 </script>
 
 <style  scoped>
-
+  .good{
+    display: flex;
+  }
 </style>
