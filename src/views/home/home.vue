@@ -10,6 +10,7 @@
         </swiper-item>
       <! </swiper> -->   <!--封装到views/home/home.vue-->
       <home-swiper :banners="banners"></home-swiper>
+      <home-recommend-view :recommends="recommends"></home-recommend-view>
       <h2>首页</h2>
   </div>
 </template>
@@ -17,6 +18,7 @@
 <script>
 import NavBar from 'components/common/navbar/NavBar.vue'  //导航组件
 import HomeSwiper from './childComps/HomeSwiper'          //轮播图组件
+import HomeRecommendView from './childComps/HomeRecommendView'
 import {gethomerequest} from 'network/homerequest'
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
@@ -29,7 +31,8 @@ export default {
     NavBar,
     // Swiper,
     // SwiperItem
-    HomeSwiper
+    HomeSwiper,
+    HomeRecommendView
   },
   data(){
     return {
