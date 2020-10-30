@@ -12,14 +12,18 @@
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <feature-view></feature-view>
+      <tab-control :titles="['流行','新款','精选']"></tab-control>
   </div>
 </template>
 
 <script>
 import NavBar from 'components/common/navbar/NavBar.vue'  //导航组件
+import TabControl from 'components/content/TabControl/TabControl' //首页分类
+
 import HomeSwiper from './childComps/HomeSwiper'          //轮播图组件
 import HomeRecommendView from './childComps/HomeRecommendView'//推荐组件
 import FeatureView from './childComps/FeatureView'  //本周新品
+
 import {gethomerequest} from 'network/homerequest'
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
@@ -34,7 +38,8 @@ export default {
     // SwiperItem
     HomeSwiper,
     HomeRecommendView,
-    FeatureView
+    FeatureView,
+    TabControl
   },
   data(){
     return {
