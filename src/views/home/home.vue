@@ -11,14 +11,16 @@
       <! </swiper> -->   <!--封装到views/home/home.vue-->
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
-      <h2>首页</h2>
+      <feature-view></feature-view>
+      <!-- <h2>首页</h2> -->
   </div>
 </template>
 
 <script>
 import NavBar from 'components/common/navbar/NavBar.vue'  //导航组件
 import HomeSwiper from './childComps/HomeSwiper'          //轮播图组件
-import HomeRecommendView from './childComps/HomeRecommendView'
+import HomeRecommendView from './childComps/HomeRecommendView'//推荐组件
+import FeatureView from './childComps/FeatureView'  //本周新品
 import {gethomerequest} from 'network/homerequest'
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
@@ -32,7 +34,8 @@ export default {
     // Swiper,
     // SwiperItem
     HomeSwiper,
-    HomeRecommendView
+    HomeRecommendView,
+    FeatureView
   },
   data(){
     return {
@@ -44,7 +47,7 @@ export default {
   created(){
     gethomerequest().then((res)=>{
       console.log(res);
-      this.banners=res.data.banner.list;         //新端口 2data
+      this.banners=res.data.banner.list;         //新端口 res.data.data.
       this.recommends=res.data.recommend.list;
     })
   }
