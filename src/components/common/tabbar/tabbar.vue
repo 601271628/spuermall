@@ -20,6 +20,8 @@ export default {
     left: 0;
     right: 0;
 
+    z-index: 9;
+
     box-shadow: 0 -2px 1px rgba(100,100,100,0.25); /*x,y，模糊度，颜色 */
   }
 </style>

@@ -12,43 +12,11 @@
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <feature-view></feature-view>
-      <tab-control :titles="['流行','新款','精选']" class="tab-control"></tab-control>
-      <goods-list :goods="goods['pop'].list" />
-      <ul>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-      </ul>
+
+      <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick">
+      </tab-control>
+
+      <goods-list :goods="goods[currentType].list" />
   </div>
 </template>
 
@@ -85,15 +53,33 @@ export default {
       recommends:[],
       goods:{
         pop:{ page:0, list:[] },
-        news:{ page:0, list:[] },
+        new:{ page:0, list:[] },
         sell:{ page:0, list:[] }
-      }
+      },
+      currentType:'pop'
     }
   },
   methods:{
+    /**事件监听相关的方法 */
+    tabClick(index){
+      // console.log(index);
+      switch(index){
+        case 0:
+          this.currentType='pop';
+          break;
+        case 1:
+          this.currentType='new';
+          break;
+        case 2:
+          this.currentType='sell';
+          break;
+      }
+    },
+
+    /**网络请求相关的方法 */
     gethomerequest(){
         gethomerequest().then((res)=>{
-          console.log(res);
+          // console.log(res);
           this.banners=res.data.banner.list;
           this.recommends=res.data.recommend.list;
         })
@@ -101,7 +87,8 @@ export default {
     getHomeGoods(type){                           //请求商品
         const page=this.goods[type].page + 1;
         getHomeGoods(type,page).then((res)=>{
-          // this.goods[type].list.push(...res.data.list); //使用push是吧数组拼接到数组后面...为es6写法，直接赋值会把数组的原来的覆盖掉，那么之前的商品信息就失去了
+          // console.log(res);
+          this.goods[type].list.push(...res.data.list); //使用push是吧数组拼接到数组后面...为es6写法，直接赋值会把数组的原来的覆盖掉，那么之前的商品信息就失去了
           // this.goods[type].list.concat(...res.data.list)
           this.goods[type].page+=1;
         })
@@ -112,7 +99,7 @@ export default {
   created(){
     this.gethomerequest();
     this.getHomeGoods('pop');
-    this.getHomeGoods('news');
+    this.getHomeGoods('new');
     this.getHomeGoods('sell');
   }
 }
@@ -140,5 +127,6 @@ export default {
       （不设配ie浏览器）*/
     position: sticky;
     top:44px;
+    z-index: 9;
   }
 </style>

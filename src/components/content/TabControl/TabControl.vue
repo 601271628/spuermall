@@ -30,6 +30,8 @@ export default {
   methods:{
     itemclick(index){
       this.currentIndex=index;
+      //传出点击的是哪一个
+      this.$emit('tabClick',index)
     }
   }
 }
