@@ -6,3 +6,13 @@ export function gethomerequest(){
     url:'/home/multidata'
   })
 }
+
+export function getHomeGoods(type,page){     //type=new,pop,sell
+    return request({
+        url:'/home/data',
+        params:{
+          type,
+          page
+        }
+    })
+}
