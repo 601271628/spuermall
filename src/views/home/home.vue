@@ -16,7 +16,8 @@
       <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick">
       </tab-control>
 
-      <goods-list :goods="goods[currentType].list" />
+      <!-- <goods-list :goods="goods[currentType].list" /> 简化-->
+      <goods-list :goods="showGoods" />
   </div>
 </template>
 
@@ -59,10 +60,15 @@ export default {
       currentType:'pop'
     }
   },
+  computed:{
+    showGoods(){
+      return this.goods[this.currentType].list
+    }
+  },
   methods:{
     /**事件监听相关的方法 */
     tabClick(index){
-      // console.log(index);
+      console.log(index);
       switch(index){
         case 0:
           this.currentType='pop';
