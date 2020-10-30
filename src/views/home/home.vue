@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div>
+  <div id="home">
       <nav-bar class="home-nav"><span slot="center">购物街</span></nav-bar>
       <!-- <swiper>
         <swiper-item v-for="(item,index) in banners" :key="index">
@@ -12,7 +12,6 @@
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <feature-view></feature-view>
-      <!-- <h2>首页</h2> -->
   </div>
 </template>
 
@@ -60,5 +59,16 @@ export default {
     font-size: 20px;
     color: white;
     font-weight: bolder;
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 9;
   }
+  #home{
+    padding-top: 44px; /**浮动影响解决 */
+    padding-bottom: 44px; /**让tabbar不遮住内容 */
+  }
+
 </style>
