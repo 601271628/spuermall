@@ -13,6 +13,7 @@
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <feature-view></feature-view>
       <tab-control :titles="['流行','新款','精选']" class="tab-control"></tab-control>
+      <goods-list :goods="goods['pop'].list" />
       <ul>
         <li>1</li>
         <li>1</li>
@@ -54,6 +55,7 @@
 <script>
 import NavBar from 'components/common/navbar/NavBar.vue'  //导航组件
 import TabControl from 'components/content/TabControl/TabControl' //首页分类
+import GoodsList from 'components/content/goods/GoodsList'
 
 import HomeSwiper from './childComps/HomeSwiper'          //轮播图组件
 import HomeRecommendView from './childComps/HomeRecommendView'//推荐组件
@@ -74,7 +76,8 @@ export default {
     HomeSwiper,
     HomeRecommendView,
     FeatureView,
-    TabControl
+    TabControl,
+    GoodsList
   },
   data(){
     return {
