@@ -34,7 +34,7 @@ export default {
     this.scroll.hasVerticalScroll=true
                                                 //监听位置
     this.scroll.on('scroll',(position)=>{
-      console.log(position);
+      // console.log(position);
       this.$emit('scroll',position)
     })
     // this.scroll.on('pullingUp',()=>{
