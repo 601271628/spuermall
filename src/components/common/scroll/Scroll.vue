@@ -17,24 +17,39 @@ export default {
       scroll:null
     }
   },
+  props:{
+    probeType:{
+      type:Number,
+      default:0
+    }
+  },
   mounted(){
     this.scroll = new BScroll(this.$refs.wrapper,{     //挂载.wrapper（'.wrapper'  || 通过ref）
-      // probeType:3,  //监听位置 01不监听 2不监听惯性 3监听惯性
+      probeType:this.probeType,  //监听位置 01不监听 2不监听惯性 3监听惯性
       // pullUpLoad:true  //监听上拉到底
       click:true
     })
     //刚开始请求的数据不完全，eg数据只是请求了一半 BScroll计算高度不对，所以需要监听图片的加载*************
     this.scroll.refresh();
     this.scroll.hasVerticalScroll=true
-    // this.scroll.on('scroll',(position)=>{
-    //   // console.log(position);
-    // })
+                                                //监听位置
+    this.scroll.on('scroll',(position)=>{
+      console.log(position);
+      this.$emit('scroll',position)
+    })
     // this.scroll.on('pullingUp',()=>{
     //   console.log('上拉加载更多');
     //   setTimeout(() => {
     //     this.scroll.finishPullUp()
     //   }, 2000);
     // })
+
+    // this.scroll.scrollTo(x,y,时间)*************scrollTo方法返回顶部
+  },
+  methods:{
+    scrollTo(x,y,time){
+      this.scroll.scrollTo(x,y,time);
+    }
   }
 }
 </script>

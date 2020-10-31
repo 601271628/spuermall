@@ -9,7 +9,7 @@
           </a>
         </swiper-item>
       <! </swiper> -->   <!--封装到views/home/home.vue-->
-      <scroll class="content">
+      <scroll class="content" ref="scrollref" :probe-type="3" @scroll="scroll">   <!--父访问子-->
         <home-swiper :banners="banners"></home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <feature-view></feature-view>
@@ -21,6 +21,7 @@
         <goods-list :goods="showGoods" />
       </scroll>
 
+      <back-top @click.native="backClick" v-show="isShow"></back-top> <!--组件不能直接监听点击 添加.native-->
   </div>
 </template>
 
@@ -28,6 +29,8 @@
 import NavBar from 'components/common/navbar/NavBar.vue'  //导航组件
 import TabControl from 'components/content/TabControl/TabControl' //首页分类
 import GoodsList from 'components/content/goods/GoodsList'
+import Scroll from 'components/common/scroll/Scroll' //滚动
+import BackTop from 'components/content/backTop/BackTop' //回到顶部
 
 import HomeSwiper from './childComps/HomeSwiper'          //轮播图组件
 import HomeRecommendView from './childComps/HomeRecommendView'//推荐组件
@@ -35,7 +38,7 @@ import FeatureView from './childComps/FeatureView'  //本周新品
 
 import {gethomerequest,getHomeGoods} from 'network/homerequest'
 
-import Scroll from 'components/common/scroll/Scroll'
+
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
 // import SwiperItem from 'components/common/swiper/SwiperItem'
@@ -52,7 +55,8 @@ export default {
     FeatureView,
     TabControl,
     GoodsList,
-    Scroll
+    Scroll,
+    BackTop
   },
   data(){
     return {
@@ -63,7 +67,8 @@ export default {
         new:{ page:0, list:[] },
         sell:{ page:0, list:[] }
       },
-      currentType:'pop'
+      currentType:'pop',
+      isShow:false
     }
   },
   computed:{
@@ -86,6 +91,17 @@ export default {
           this.currentType='sell';
           break;
       }
+    },
+    backClick(){
+      // console.log('backClick');
+      // this.$refs.scroll.scroll.scrollTo(0,0,500) //参数x,y,时间ms
+      this.$refs.scrollref.scrollTo(0,0,500)
+    },
+    scroll(position){
+      if(position.y > -285 ){
+        this.isShow=false
+      }
+      else this.isShow=true
     },
 
     /**网络请求相关的方法 */
@@ -147,5 +163,7 @@ export default {
     overflow: hidden;
     /* margin-top: 44px; */
     /* margin-bottom: 50px; */
+
+    /*或者使用定位解决position :absolute top44 buttom50 left0 right0*/
   }
 </style>
