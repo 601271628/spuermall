@@ -98,10 +98,8 @@ export default {
       this.$refs.scrollref.scrollTo(0,0,500)
     },
     scroll(position){
-      if(position.y > -285 ){
-        this.isShow=false
-      }
-      else this.isShow=true
+      // if(position.y > -285 ){this.isShow=false} else this.isShow=true   下面简写
+      this.isShow = (position.y < -285)
     },
 
     /**网络请求相关的方法 */

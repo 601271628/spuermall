@@ -5,7 +5,7 @@ export function request(config){                          //直接return axios�
   const axios1=axios.create({
     // baseURL:'http://123.207.32.32:8000',
     baseURL:'http://152.136.185.210:8000/api/w6',
-    timeout:5000  //headers:{}
+    timeout:10000  //headers:{}
   })
 
   //2.axios拦截器
