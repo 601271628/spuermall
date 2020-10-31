@@ -13,8 +13,6 @@ export function request(config){                          //直接return axios�
   axios1.interceptors.request.use((config1)=>{
     console.log("访问 success");
     return config1        //拦截后要return 不然就下面的操作就执行不了
-  },(err)=>{
-    console.log(err);
   })
 
   /*3.response服务器做出响应时的拦截（服务器请求成功，做出响应返回来的数据被拦截了

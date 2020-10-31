@@ -9,15 +9,18 @@
           </a>
         </swiper-item>
       <! </swiper> -->   <!--封装到views/home/home.vue-->
-      <home-swiper :banners="banners"></home-swiper>
-      <home-recommend-view :recommends="recommends"></home-recommend-view>
-      <feature-view></feature-view>
+      <scroll class="content">
+        <home-swiper :banners="banners"></home-swiper>
+        <home-recommend-view :recommends="recommends"></home-recommend-view>
+        <feature-view></feature-view>
 
-      <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick">
-      </tab-control>
+        <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick">
+        </tab-control>
 
-      <!-- <goods-list :goods="goods[currentType].list" /> 简化-->
-      <goods-list :goods="showGoods" />
+        <!-- <goods-list :goods="goods[currentType].list" /> 简化 计算属性-->
+        <goods-list :goods="showGoods" />
+      </scroll>
+
   </div>
 </template>
 
@@ -31,6 +34,8 @@ import HomeRecommendView from './childComps/HomeRecommendView'//推荐组件
 import FeatureView from './childComps/FeatureView'  //本周新品
 
 import {gethomerequest,getHomeGoods} from 'network/homerequest'
+
+import Scroll from 'components/common/scroll/Scroll'
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
 // import SwiperItem from 'components/common/swiper/SwiperItem'
@@ -46,7 +51,8 @@ export default {
     HomeRecommendView,
     FeatureView,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll
   },
   data(){
     return {
@@ -85,7 +91,7 @@ export default {
     /**网络请求相关的方法 */
     gethomerequest(){
         gethomerequest().then((res)=>{
-          // console.log(res);
+          // console.log(res.data);
           this.banners=res.data.banner.list;
           this.recommends=res.data.recommend.list;
         })
@@ -93,9 +99,8 @@ export default {
     getHomeGoods(type){                           //请求商品
         const page=this.goods[type].page + 1;
         getHomeGoods(type,page).then((res)=>{
-          // console.log(res);
+          // console.log(res.data.list);
           this.goods[type].list.push(...res.data.list); //使用push是吧数组拼接到数组后面...为es6写法，直接赋值会把数组的原来的覆盖掉，那么之前的商品信息就失去了
-          // this.goods[type].list.concat(...res.data.list)
           this.goods[type].page+=1;
         })
     }
@@ -125,8 +130,9 @@ export default {
     z-index: 9;
   }
   #home{
-    padding-top: 44px; /**浮动影响解决 */
-    padding-bottom: 50px; /**让tabbar不遮住内容 */
+    padding-top: 44px; /*浮动影响解决 换成content margintop*/
+    /* padding-bottom: 50px; *让tabbar不遮住内容 */
+    height: 100vh; /*看见的高度*/
   }
   .tab-control{
     /*skitcy当该元素的位置将要移出偏移范围时，定位又会变成fixed，根据设置的left、top等属性成固定位置的效果
@@ -134,5 +140,12 @@ export default {
     position: sticky;
     top:44px;
     z-index: 9;
+  }
+  .content{
+    /* height: 300px; */
+    height: calc(100% - 49px);  /*100%对于父元素来说 44 + 49 -44padding*/
+    overflow: hidden;
+    /* margin-top: 44px; */
+    /* margin-bottom: 50px; */
   }
 </style>
