@@ -21,12 +21,16 @@ export default {
     probeType:{
       type:Number,
       default:0
+    },
+    pullUpLoad:{
+      type:Boolean,
+      default:false
     }
   },
   mounted(){
     this.scroll = new BScroll(this.$refs.wrapper,{     //挂载.wrapper（'.wrapper'  || 通过ref）
       probeType:this.probeType,  //监听位置 01不监听 2不监听惯性 3监听惯性
-      // pullUpLoad:true  //监听上拉到底
+      pullUpLoad:this.pullUpLoad,  //监听上拉到底
       click:true
     })
     //刚开始请求的数据不完全，eg数据只是请求了一半 BScroll计算高度不对，所以需要监听图片的加载*************
@@ -37,18 +41,20 @@ export default {
       // console.log(position);
       this.$emit('scroll',position)
     })
-    // this.scroll.on('pullingUp',()=>{
-    //   console.log('上拉加载更多');
-    //   setTimeout(() => {
-    //     this.scroll.finishPullUp()
-    //   }, 2000);
-    // })
+
+    this.scroll.on('pullingUp',()=>{          //监听加载
+      console.log('上拉加载更多');
+      this.$emit('pullingUp')
+    })
 
     // this.scroll.scrollTo(x,y,时间)*************scrollTo方法返回顶部
   },
   methods:{
     scrollTo(x,y,time){
       this.scroll.scrollTo(x,y,time);
+    },
+    finishPullUp(){
+      this.scroll.finishPullUp() //scroll对象自带的方法  告诉请求数据 完成了 可以进行下一次请求了
     }
   }
 }
