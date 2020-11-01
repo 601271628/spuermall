@@ -51,10 +51,14 @@ export default {
   },
   methods:{
     scrollTo(x,y,time){
-      this.scroll.scrollTo(x,y,time);
+      this.scroll && this.scroll.scrollTo(x,y,time);
     },
     finishPullUp(){
       this.scroll.finishPullUp() //scroll对象自带的方法  告诉请求数据 完成了 可以进行下一次请求了
+    },
+    refresh(){
+      console.log('----');
+      this.scroll && this.scroll.refresh()
     }
   }
 }

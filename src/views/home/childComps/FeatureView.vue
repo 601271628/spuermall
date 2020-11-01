@@ -1,4 +1,4 @@
-<!--  -->
+<!--在home.vue使用 -->
 <template>
   <div class="feature">
     <a href="https://act.mogujie.com/zzlx64">

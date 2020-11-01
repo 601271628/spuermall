@@ -108,7 +108,16 @@ export default {
     loadMore(){ //scroll传出pullingUp事件拉到底了后 会在这里增加goodslist的商品数
       this.getHomeGoods(this.currentType)    //发送请求 增加对应pop/new/sell 的goodslist
       this.$refs.scrollref.finishPullUp()  //告诉数据加载完成 可以进行下一次了
-      // this.$refs.scrollref.scroll.refresh()  //写到了getHomeGoods异步请求服务器数据方法中了
+      // this.$refs.scrollref.scroll.refresh()  //写到了getHomeGoods异步请求服务器数据方法中了(方法1)
+    },
+    debounce(func,delay){
+      let timer=null
+      return function(...args){
+        if(timer) clearTimeout(timer)
+        timer=setTimeout(() => {
+          func.apply(this,args)
+        }, delay);
+      }
     },
 
     /**网络请求相关的方法 */
@@ -126,7 +135,7 @@ export default {
           this.goods[type].list.push(...res.data.list); //使用push是吧数组拼接到数组后面...为es6写法，直接赋值会把数组的原来的覆盖掉，那么之前的商品信息就失去了
           this.goods[type].page+=1;
         //图片数据未加载完成 可滚高度设定完成 图片不能上拉问题 每次请求refresh结束刷新数据**************************
-          this.$refs.scrollref.scroll.refresh()
+          // this.$refs.scrollref.scroll.refresh() (better-scroll 方法2)
         })
     }
 
@@ -137,6 +146,20 @@ export default {
     this.getHomeGoods('pop');
     this.getHomeGoods('new');
     this.getHomeGoods('sell');
+  },
+  mounted(){
+    // let count=0;
+    // //接受goodslistitem发送的bus共享事件 （goodslistitem要使用scroll对象的refresh）
+    // this.$bus.$on('itemiamgeload',()=>{
+    //   // better-scroll 方法3 （最丝滑，因为每张图片都refresh了）
+    //   // this.$refs.scrollref.refresh()报错
+    //   // if(++count % 30 == 0)
+    //     this.$refs.scrollref.scroll.refresh()
+    // })
+    const refresh=this.debounce(this.$refs.scrollref.refresh,500)
+    this.$bus.$on('itemiamgeload',()=>{
+      refresh()
+    })
   }
 }
 </script>
