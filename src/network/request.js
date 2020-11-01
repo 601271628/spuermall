@@ -11,7 +11,7 @@ export function request(config){                          //直接return axios�
   //2.axios拦截器
   // 1.request发送请求时的拦截（把你的访问拦截了，你访问使用的baseurl....可以打印出来看到）
   axios1.interceptors.request.use((config1)=>{
-    console.log("访问 success");
+    console.log("request拦截访问 success");
     return config1        //拦截后要return 不然就下面的操作就执行不了
   })
 

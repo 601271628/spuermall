@@ -108,7 +108,7 @@ export default {
     loadMore(){ //scroll传出pullingUp事件拉到底了后 会在这里增加goodslist的商品数
       this.getHomeGoods(this.currentType)    //发送请求 增加对应pop/new/sell 的goodslist
       this.$refs.scrollref.finishPullUp()  //告诉数据加载完成 可以进行下一次了
-      this.$refs.scrollref.scroll.refresh()  //写到了getHomeGoods异步请求服务器数据方法中了
+      // this.$refs.scrollref.scroll.refresh()  //写到了getHomeGoods异步请求服务器数据方法中了
     },
 
     /**网络请求相关的方法 */
@@ -126,7 +126,7 @@ export default {
           this.goods[type].list.push(...res.data.list); //使用push是吧数组拼接到数组后面...为es6写法，直接赋值会把数组的原来的覆盖掉，那么之前的商品信息就失去了
           this.goods[type].page+=1;
         //图片数据未加载完成 可滚高度设定完成 图片不能上拉问题 每次请求refresh结束刷新数据**************************
-          // this.$refs.scrollref.scroll.refresh()
+          this.$refs.scrollref.scroll.refresh()
         })
     }
 
