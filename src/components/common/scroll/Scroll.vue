@@ -57,8 +57,11 @@ export default {
       this.scroll && this.scroll.finishPullUp() //scroll对象自带的方法  告诉请求数据 完成了 可以进行下一次请求了
     },
     refresh(){
-      console.log('----');
+      // console.log('scorll----');
       this.scroll && this.scroll.refresh()
+    },
+    getScrollY(){
+      return this.scroll ? this.scroll.y:0
     }
   }
 }

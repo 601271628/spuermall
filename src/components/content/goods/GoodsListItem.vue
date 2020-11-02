@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <img :src="goodsItem.show.img" @load="iamgeLoad"> <!--iamgeLoad事件时图片load加载完 进行refresh-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
@@ -25,6 +25,11 @@ export default {
     iamgeLoad(){
       //使用bus管理共享事件 什么组件都能用（因为这个组件无法直接获取scroll组件的scroll对象 可通过bus来获得scroll）
       this.$bus.$emit('itemiamgeload')
+    },
+    itemClick(){
+      // console.log(this.goodsItem);
+      this.$router.push('/detail/'+this.goodsItem.iid)
+      // query:{id:18}
     }
   }
 }

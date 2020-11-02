@@ -2,23 +2,25 @@
 <template>
   <div id="home">
       <nav-bar class="home-nav"><span slot="center">购物街</span></nav-bar>
-      <!-- <swiper>
-        <swiper-item v-for="(item,index) in banners" :key="index">
-          <a :href="item.link">
-            <img :src="item.image">
-          </a>
-        </swiper-item>
-      <! </swiper> -->   <!--封装到views/home/home.vue-->
+      <tab-control :titles="['流行','新款','精选']"
+          class="tab-control1"
+          @tabClick="tabClick"
+          ref="tabControl1"
+          v-show="isTabFixed">
+        </tab-control>
+
       <scroll class="content" ref="scrollref"
-      :probe-type="3"
-      @scroll="scroll"
-      :pull-up-load="true"
-      @pullingUp="loadMore">   <!--父访问子-->
-        <home-swiper :banners="banners"></home-swiper>
+        :probe-type="3"
+        @scroll="scroll"
+        :pull-up-load="true"
+        @pullingUp="loadMore">   <!--父访问子-->
+        <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"></home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <feature-view></feature-view>
 
-        <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick">
+        <tab-control :titles="['流行','新款','精选']"
+          @tabClick="tabClick"
+          ref="tabControl2">
         </tab-control>
 
         <!-- <goods-list :goods="goods[currentType].list" /> 简化 计算属性-->
@@ -73,7 +75,10 @@ export default {
         sell:{ page:0, list:[] }
       },
       currentType:'pop',
-      isShow:false
+      isShow:false,
+      tabOffsetTop:0,   //tabControl的offsetTop
+      isTabFixed:false,
+      saveY:0
     }
   },
   computed:{
@@ -84,7 +89,6 @@ export default {
   methods:{
     /**事件监听相关的方法 */
     tabClick(index){
-      console.log(index);
       switch(index){
         case 0:
           this.currentType='pop';
@@ -96,6 +100,8 @@ export default {
           this.currentType='sell';
           break;
       }
+      this.$refs.tabControl2.currentIndex=index;
+      this.$refs.tabControl1.currentIndex=index;
     },
     backClick(){
       // console.log('backClick');
@@ -103,23 +109,23 @@ export default {
       this.$refs.scrollref.scrollTo(0,0,500)
     },
     scroll(position){
+      //1.判断backto是否显示
       // if(position.y > -285 ){this.isShow=false} else this.isShow=true   下面简写
       this.isShow = (position.y < -285)
+      //2.判断是否tabControl吸顶
+      this.isTabFixed=(-position.y) > this.tabOffsetTop
     },
     loadMore(){ //scroll传出pullingUp事件拉到底了后 会在这里增加goodslist的商品数
       this.getHomeGoods(this.currentType)    //发送请求 增加对应pop/new/sell 的goodslist
       this.$refs.scrollref.finishPullUp()  //告诉数据加载完成 可以进行下一次了
       // this.$refs.scrollref.scroll.refresh()  //写到了getHomeGoods异步请求服务器数据方法中了(方法1)
     },
-    // debounce(func,delay){
-    //   let timer=null
-    //   return function(...args){
-    //     if(timer) clearTimeout(timer)
-    //     timer=setTimeout(() => {
-    //       func.apply(this,args)
-    //     }, delay);
-    //   }
-    // },
+    // debounce(func,delay){ },封装了 在common文件夹
+    swiperImageLoad(){
+      //获取tabControl的offsetTop
+      // 所有的组件都有对应$el：用于获取组件中的元素   轮播图加载完再计算tabControl的offsetTop
+      this.tabOffsetTop=this.$refs.tabControl2.$el.offsetTop
+    },
 
     /**网络请求相关的方法 */
     gethomerequest(){
@@ -140,6 +146,15 @@ export default {
         })
     }
 
+  },
+  //keep-alive配合生效 （切换时 保留原来的位置 scrollTo来实现位置不变）
+  activated(){
+    this.$refs.scrollref.refresh()//最好再刷新一下
+    this.$refs.scrollref.scrollTo(0,this.saveY,0) /*x,y,时间*/
+  },
+  deactivated(){
+    // this.saveY=this.$refs.scrollref.scroll.y;
+    this.saveY=this.$refs.scrollref.getScrollY();
   },
   //组件创建完 发送请求要数据
   created(){
@@ -171,32 +186,37 @@ export default {
     font-size: 20px;
     color: white;
     font-weight: bolder;
-
-    position: fixed;
+    /* position: fixed;  没必要了 因为better-scroll滚动区域不会包含到homeNav
     left: 0;
     right: 0;
     top: 0;
-    z-index: 9;
+    z-index: 9; */
   }
   #home{
-    padding-top: 44px; /*浮动影响解决 换成content margintop*/
+    /*padding-top: 44px; /*浮动影响解决 换成content margintop*/
     /* padding-bottom: 50px; *让tabbar不遮住内容 */
     height: 100vh; /*看见的高度*/
+    position: relative;
   }
-  .tab-control{
-    /*skitcy当该元素的位置将要移出偏移范围时，定位又会变成fixed，根据设置的left、top等属性成固定位置的效果
-      （不设配ie浏览器）*/
+  /*.tab-control{ //scroll中失效了
     position: sticky;
     top:44px;
+    z-index: 9;
+  } */
+  .tab-control1{
+    position: fixed;
+    left: 0;
+    right: 0;
     z-index: 9;
   }
   .content{
     /* height: 300px; */
-    height: calc(100% - 49px);  /*100%对于父元素来说 44 + 49 -44padding*/
+    height: calc(100% - 93px);  /*100%对于父元素来说 44 + 49 -44padding*/
     overflow: hidden;
     /* margin-top: 44px; */
     /* margin-bottom: 50px; */
 
     /*或者使用定位解决position :absolute top44 buttom50 left0 right0*/
   }
+
 </style>

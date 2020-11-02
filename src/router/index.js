@@ -4,6 +4,7 @@ const home =()=> import('views/home/home.vue')
 const category=()=>import ('views/category/category.vue')
 const cart=()=>import ('views/cart/cart.vue')
 const profile=()=>import ('views/profile/profile.vue')
+const Detail=()=>import('views/detail/Detail.vue')
 Vue.use(Router)
 
 const router= new Router({
@@ -40,6 +41,13 @@ const router= new Router({
       component:profile,
       meta:{
         title:'我的'
+      }
+    },
+    {
+      path:'/detail/:id',
+      component:Detail,
+      meta:{
+        title:'详情'
       }
     }
   ]
