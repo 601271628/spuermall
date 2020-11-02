@@ -45,7 +45,6 @@ export default {
 <style  scoped>
   .title{
     display: flex;
-    /* font-size: 13px; */
   }
   .title-item{
     flex: 1;
