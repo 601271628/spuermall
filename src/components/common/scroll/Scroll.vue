@@ -43,7 +43,7 @@ export default {
     })
 
     this.scroll.on('pullingUp',()=>{          //监听加载
-      console.log('上拉加载更多');
+      // console.log('上拉加载更多');
       this.$emit('pullingUp')
     })
 
@@ -54,7 +54,7 @@ export default {
       this.scroll && this.scroll.scrollTo(x,y,time);
     },
     finishPullUp(){
-      this.scroll.finishPullUp() //scroll对象自带的方法  告诉请求数据 完成了 可以进行下一次请求了
+      this.scroll && this.scroll.finishPullUp() //scroll对象自带的方法  告诉请求数据 完成了 可以进行下一次请求了
     },
     refresh(){
       console.log('----');

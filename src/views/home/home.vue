@@ -42,6 +42,7 @@ import FeatureView from './childComps/FeatureView'  //本周新品
 
 import {gethomerequest,getHomeGoods} from 'network/homerequest'
 
+import {debounce} from 'common/utils'
 
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
@@ -110,15 +111,15 @@ export default {
       this.$refs.scrollref.finishPullUp()  //告诉数据加载完成 可以进行下一次了
       // this.$refs.scrollref.scroll.refresh()  //写到了getHomeGoods异步请求服务器数据方法中了(方法1)
     },
-    debounce(func,delay){
-      let timer=null
-      return function(...args){
-        if(timer) clearTimeout(timer)
-        timer=setTimeout(() => {
-          func.apply(this,args)
-        }, delay);
-      }
-    },
+    // debounce(func,delay){
+    //   let timer=null
+    //   return function(...args){
+    //     if(timer) clearTimeout(timer)
+    //     timer=setTimeout(() => {
+    //       func.apply(this,args)
+    //     }, delay);
+    //   }
+    // },
 
     /**网络请求相关的方法 */
     gethomerequest(){
@@ -156,7 +157,7 @@ export default {
     //   // if(++count % 30 == 0)
     //     this.$refs.scrollref.scroll.refresh()
     // })
-    const refresh=this.debounce(this.$refs.scrollref.refresh,500)
+    const refresh=debounce(this.$refs.scrollref.refresh,500)
     this.$bus.$on('itemiamgeload',()=>{
       refresh()
     })
