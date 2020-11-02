@@ -17,6 +17,7 @@ export default {
   .navbar{
     display: flex;
     line-height: 44px;   /*垂直居中 且会自动设置高度为44px*/
+    height: 44px;
     text-align: center;  /*水平居中 */
     /* background-color: rgb(252, 166, 180);
             因为不同的navbar背景不同 那就把背景颜色写在各自使用时的位置吧*/

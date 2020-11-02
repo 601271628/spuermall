@@ -27,9 +27,7 @@ export default {
       this.$bus.$emit('itemiamgeload')
     },
     itemClick(){
-      // console.log(this.goodsItem);
-      this.$router.push('/detail/'+this.goodsItem.iid)
-      // query:{id:18}
+      this.$router.push('/detail/'+this.goodsItem.iid)// query:{id:18}
     }
   }
 }

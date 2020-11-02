@@ -44,7 +44,7 @@ const router= new Router({
       }
     },
     {
-      path:'/detail/:id',
+      path:'/detail/:iid',
       component:Detail,
       meta:{
         title:'详情'
