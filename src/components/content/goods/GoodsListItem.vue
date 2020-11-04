@@ -27,7 +27,7 @@ export default {
       this.$bus.$emit('itemiamgeload')
     },
     itemClick(){
-      this.$router.push('/detail/'+this.goodsItem.iid)// query:{id:18}
+      this.$router.push('/detail/'+this.goodsItem.iid)// query:{id:18} iid为每一个商品自带的属性
     }
   }
 }

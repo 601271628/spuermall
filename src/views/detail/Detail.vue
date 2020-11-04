@@ -3,24 +3,32 @@
   <div id="detail">
       <detail-nav-bar/>
       <detail-swiper :top-images="topImages"></detail-swiper>
+      <detail-base-info :goods="goods"></detail-base-info>
+      <detail-shop-info :shop="shops"></detail-shop-info>
   </div>
 </template>
 
 <script>
 import DetailNavBar from 'views/detail/childComps/DetailNavBar'
-import {getDetail} from 'network/detail'
+import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'   //导入方法、类
 import DetailSwiper from './childComps/DetailSwiper'
+import DetailBaseInfo from './childComps/DetailBaseInfo'
+import DetailShopInfo from './childComps/DetailShopInfo'
 
 export default {
   name:'Detail',
   components:{
     DetailNavBar,
-    DetailSwiper
+    DetailSwiper,
+    DetailBaseInfo,
+    DetailShopInfo
   },
   data(){
     return {
       iid:null,
-      topImages:[]
+      topImages:[],
+      goods:{},
+      shops:{}
     }
   },
   created(){
@@ -32,13 +40,22 @@ export default {
 
     //根据iid请求数据
     getDetail(this.iid).then((res)=>{
+      const data=res.result;
       console.log(res);
-      this.topImages=res.result.itemInfo.topImages;
+      this.topImages=data.itemInfo.topImages;
+
+      this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services) //商品描述
+      this.shops=new Shop(data.shopInfo)   //商家信息
+
     })
   }
 }
 </script>
 
 <style  scoped>
-
+  #detail{
+    position: relative;
+    z-index: 10;   /*把下面的tabbar 盖掉还得加背景颜色*/
+    background-color: #fff;
+  }
 </style>
