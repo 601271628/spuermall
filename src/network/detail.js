@@ -34,7 +34,7 @@ export class Shop {           //商家的消息
 }
 
 
-export class GoodsParam {
+export class GoodsParam {                 //商品参数 如：推荐的尺寸
   constructor(info, rule) {
     // 注: images可能没有值(某些商品有值, 某些没有值)
     this.image = info.images ? info.images[0] : '';

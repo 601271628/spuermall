@@ -7,6 +7,7 @@
         <detail-base-info :goods="goods"></detail-base-info>
         <detail-shop-info :shop="shops"></detail-shop-info>
         <detail-goods-info :detailInfo="detailInfo"></detail-goods-info>
+        <detail-param-info :paramInfo="paramInfo"></detail-param-info>
       </scroll>
   </div>
 </template>
@@ -17,6 +18,7 @@ import DetailSwiper from './childComps/DetailSwiper'
 import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
+import DetailParamInfo from './childComps/DetailParamInfo'
 
 import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'   //导入方法、类
 
@@ -30,7 +32,8 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     Scroll,
-    DetailGoodsInfo
+    DetailGoodsInfo,
+    DetailParamInfo
   },
   data(){
     return {
@@ -38,7 +41,8 @@ export default {
       topImages:[],
       goods:{},
       shops:{},
-      detailInfo:{}
+      detailInfo:{},
+      paramInfo:{}
     }
   },
   created(){
@@ -54,9 +58,10 @@ export default {
       console.log(res);
       this.topImages=data.itemInfo.topImages;          //轮播图
 
-      this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services) //商品描述
-      this.shops=new Shop(data.shopInfo)   //商家信息
-      this.detailInfo=data.detailInfo  //尺寸...
+      this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services) //商品描述(baseinfo)
+      this.shops=new Shop(data.shopInfo)   //商家信息(shopinfo)
+      this.detailInfo=data.detailInfo  //店家下面...(goodsinfo)
+      this.paramInfo=new GoodsParam(data.itemParams.info,data.itemParams.rule)  //参数信息
     })
   }
 }
