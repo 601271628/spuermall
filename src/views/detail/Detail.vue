@@ -2,13 +2,15 @@
 <template>
   <div id="detail">
       <detail-nav-bar class="detail-nav"/>
-      <scroll class="content">
+      <scroll class="content" ref="scrollref">
         <detail-swiper :top-images="topImages"></detail-swiper>
         <detail-base-info :goods="goods"></detail-base-info>
         <detail-shop-info :shop="shops"></detail-shop-info>
-        <detail-goods-info :detailInfo="detailInfo"></detail-goods-info>
+        <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
         <detail-param-info :paramInfo="paramInfo"></detail-param-info>
+        <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
       </scroll>
+      <div></div>
   </div>
 </template>
 
@@ -19,6 +21,7 @@ import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
+import DetailCommentInfo from './childComps/DetailCommentInfo'
 
 import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'   //导入方法、类
 
@@ -33,7 +36,8 @@ export default {
     DetailShopInfo,
     Scroll,
     DetailGoodsInfo,
-    DetailParamInfo
+    DetailParamInfo,
+    DetailCommentInfo
   },
   data(){
     return {
@@ -42,7 +46,8 @@ export default {
       goods:{},
       shops:{},
       detailInfo:{},
-      paramInfo:{}
+      paramInfo:{},
+      commentInfo:{}
     }
   },
   created(){
@@ -61,8 +66,15 @@ export default {
       this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services) //商品描述(baseinfo)
       this.shops=new Shop(data.shopInfo)   //商家信息(shopinfo)
       this.detailInfo=data.detailInfo  //店家下面...(goodsinfo)
+      // this.$refs.scrollref.refresh();
       this.paramInfo=new GoodsParam(data.itemParams.info,data.itemParams.rule)  //参数信息
+      if(data.rate.cRate != 0)  this.commentInfo=data.rate.list[0] /****************** */
     })
+  },
+  methods:{
+    imageLoad(){   //店家消息下面的 图片需要刷新一下 重新计算高度
+      this.$refs.scrollref.refresh()
+    }
   }
 }
 </script>
