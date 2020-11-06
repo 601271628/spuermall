@@ -9,6 +9,7 @@
         <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
         <detail-param-info :paramInfo="paramInfo"></detail-param-info>
         <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
+        <goods-list :goods="recommends"></goods-list>
       </scroll>
       <div></div>
   </div>
@@ -23,9 +24,12 @@ import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
 
-import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'   //导入方法、类
+import {getDetail,Goods,Shop,GoodsParam,getRecommend} from 'network/detail'   //导入方法、类
 
 import Scroll from 'components/common/scroll/Scroll'
+import GoodsList from 'components/content/goods/GoodsList'
+
+import {debounce} from 'common/utils' //防抖
 
 export default {
   name:'Detail',
@@ -37,7 +41,8 @@ export default {
     Scroll,
     DetailGoodsInfo,
     DetailParamInfo,
-    DetailCommentInfo
+    DetailCommentInfo,
+    GoodsList
   },
   data(){
     return {
@@ -47,7 +52,8 @@ export default {
       shops:{},
       detailInfo:{},
       paramInfo:{},
-      commentInfo:{}
+      commentInfo:{},
+      recommends:[]
     }
   },
   created(){
@@ -57,7 +63,7 @@ export default {
     //1.保存点击对应goodlistitems后路劲修稿的(/detail/:iid)的iid
     this.iid=this.$route.params.iid
 
-    //根据iid请求数据
+    //2.根据iid请求上商品的数据
     getDetail(this.iid).then((res)=>{
       const data=res.result;
       console.log(res);
@@ -70,11 +76,26 @@ export default {
       this.paramInfo=new GoodsParam(data.itemParams.info,data.itemParams.rule)  //参数信息
       if(data.rate.cRate != 0)  this.commentInfo=data.rate.list[0] /****************** */
     })
+
+    //3.获取推荐数据
+    getRecommend().then((res)=>{
+      // console.log(res);
+      this.recommends=res.data.list
+    })
   },
   methods:{
     imageLoad(){   //店家消息下面的 图片需要刷新一下 重新计算高度
       this.$refs.scrollref.refresh()
+    },
+    itemiamgeload(){
+      this.$refs.scrollref.refresh()
     }
+  },
+  mounted(){
+    const refresh=debounce(this.$refs.scrollref.refresh,500)
+    this.$bus.$on('itemiamgeload',()=>{   //推荐图片图片需要刷新一下 重新计算高度
+      refresh()
+    })
   }
 }
 </script>

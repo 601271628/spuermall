@@ -12,13 +12,13 @@
         <img :src="commentInfo.user.avatar" alt="" />
         <span>{{ commentInfo.user.uname }}</span>
       </div>
-      <div class="info-detail">
+      <div class="info-detail">     <!--评论内容-->
         <p>{{ commentInfo.content }}</p>
         <div class="info-other">
           <span class="date">{{ commentInfo.created | showDate}}</span> ><!--created存时间戳-->
           <span>{{ commentInfo.style }}</span>
         </div>
-        <div class="info-imgs">
+        <div class="info-imgs">   <!--评论图片-->
           <img :key="index" :src="item" alt="" v-for="(item, index) in commentInfo.images" />
         </div>
       </div>
@@ -45,7 +45,7 @@ export default {
         //1.时间戳转date对象
       const date = new Date(value * 1000);  //时间戳为秒 -> 毫秒
         //2.date进行格式化
-      return formatDate(date, "yyyy-MM-dd hh:mm");  //yyyy为年份 MM月份 dd日期 hh时间 mm分钟 ss秒
+      return formatDate(date, "yyyy/MM/dd hh:mm");  //yyyy为年份 MM月份 dd日期 hh时间 mm分钟 ss秒
     }
   }
 }

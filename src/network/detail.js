@@ -1,12 +1,18 @@
 import {request} from './request'
 
-export function getDetail(iid){
+export function getDetail(iid){        //商品信息/detail/对应的iid
   return request({
     url:'/detail',
     params:{
       iid
     }
   });
+}
+
+export function getRecommend(){ //详情页的 推荐数据
+  return request({
+    url:'/recommend'
+  })
 }
 
 export class Goods{       //把商品的描述 价格 ...抽离为一个类整合起来 在导出类就方便使用了
