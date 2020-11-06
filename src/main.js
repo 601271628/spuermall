@@ -9,4 +9,4 @@ Vue.prototype.$bus=new Vue()
 new Vue({
   router,
   render: h => h(App),
-}).$mount('#app')
+}).$mount('#app')  //和el:"#app"一样的
