@@ -94,6 +94,7 @@ export default {
   methods:{
     imageLoad(){   //店家消息下面的 图片需要刷新一下 重新计算高度
       this.$refs.scrollref.refresh()
+      // debounce(this.$refs.scrollref.refresh,500)
     },
     backtopclick(){
       this.$refs.scrollref.scrollTo(0,0,500);
