@@ -1,19 +1,26 @@
 <!--  -->
 <template>
   <div id="detail">
-      <detail-nav-bar/>
-      <detail-swiper :top-images="topImages"></detail-swiper>
-      <detail-base-info :goods="goods"></detail-base-info>
-      <detail-shop-info :shop="shops"></detail-shop-info>
+      <detail-nav-bar class="detail-nav"/>
+      <scroll class="content">
+        <detail-swiper :top-images="topImages"></detail-swiper>
+        <detail-base-info :goods="goods"></detail-base-info>
+        <detail-shop-info :shop="shops"></detail-shop-info>
+        <detail-goods-info :detailInfo="detailInfo"></detail-goods-info>
+      </scroll>
   </div>
 </template>
 
 <script>
 import DetailNavBar from 'views/detail/childComps/DetailNavBar'
-import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'   //导入方法、类
 import DetailSwiper from './childComps/DetailSwiper'
 import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailShopInfo from './childComps/DetailShopInfo'
+import DetailGoodsInfo from './childComps/DetailGoodsInfo'
+
+import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'   //导入方法、类
+
+import Scroll from 'components/common/scroll/Scroll'
 
 export default {
   name:'Detail',
@@ -21,14 +28,17 @@ export default {
     DetailNavBar,
     DetailSwiper,
     DetailBaseInfo,
-    DetailShopInfo
+    DetailShopInfo,
+    Scroll,
+    DetailGoodsInfo
   },
   data(){
     return {
       iid:null,
       topImages:[],
       goods:{},
-      shops:{}
+      shops:{},
+      detailInfo:{}
     }
   },
   created(){
@@ -42,11 +52,11 @@ export default {
     getDetail(this.iid).then((res)=>{
       const data=res.result;
       console.log(res);
-      this.topImages=data.itemInfo.topImages;
+      this.topImages=data.itemInfo.topImages;          //轮播图
 
       this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services) //商品描述
       this.shops=new Shop(data.shopInfo)   //商家信息
-
+      this.detailInfo=data.detailInfo  //尺寸...
     })
   }
 }
@@ -57,5 +67,14 @@ export default {
     position: relative;
     z-index: 10;   /*把下面的tabbar 盖掉还得加背景颜色*/
     background-color: #fff;
+    height: 100vh;  /*配合calc的100% */
+  }
+  .detail-nav{
+    position: relative;
+    z-index: 10;
+    background-color: #fff;
+  }
+  .content{
+    height: calc(100% - 44px);
   }
 </style>
