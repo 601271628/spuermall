@@ -2,7 +2,7 @@
 <template>
   <div id="detail">
       <detail-nav-bar class="detail-nav"/>
-      <scroll class="content" ref="scrollref">
+      <scroll class="content" ref="scrollref" :probe-type="3" @scroll="scroll">
         <detail-swiper :top-images="topImages"></detail-swiper>
         <detail-base-info :goods="goods"></detail-base-info>
         <detail-shop-info :shop="shops"></detail-shop-info>
@@ -11,7 +11,7 @@
         <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
         <goods-list :goods="recommends"></goods-list>
       </scroll>
-      <div></div>
+      <back-top v-show="isShow" @click.native="backtopclick"></back-top> <!--原生组件绑定事件加.native-->
   </div>
 </template>
 
@@ -28,8 +28,11 @@ import {getDetail,Goods,Shop,GoodsParam,getRecommend} from 'network/detail'   //
 
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
+import BackTop from 'components/content/backTop/BackTop'
 
 import {debounce} from 'common/utils' //防抖
+
+import {itemListenrMixin} from 'common/mixin'  //混入的内容   mixins:[itemListenrMixin]
 
 export default {
   name:'Detail',
@@ -42,8 +45,10 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
-    GoodsList
+    GoodsList,
+    BackTop
   },
+  mixins:[itemListenrMixin], //把混入的内容方放进来
   data(){
     return {
       iid:null,
@@ -53,7 +58,10 @@ export default {
       detailInfo:{},
       paramInfo:{},
       commentInfo:{},
-      recommends:[]
+      recommends:[],
+      // detailItemlisten:null
+      itemImgListener:null,
+      isShow:false
     }
   },
   created(){
@@ -87,15 +95,23 @@ export default {
     imageLoad(){   //店家消息下面的 图片需要刷新一下 重新计算高度
       this.$refs.scrollref.refresh()
     },
-    itemiamgeload(){
-      this.$refs.scrollref.refresh()
+    backtopclick(){
+      this.$refs.scrollref.scrollTo(0,0,500);
+    },
+    scroll(position){
+      this.isShow = (position.y < -285)
     }
   },
   mounted(){
-    const refresh=debounce(this.$refs.scrollref.refresh,500)
-    this.$bus.$on('itemiamgeload',()=>{   //推荐图片图片需要刷新一下 重新计算高度
-      refresh()
-    })
+    // const refresh=debounce(this.$refs.scrollref.refresh,500)
+    // this.detailItemlisten=()=>{   //推荐的图片需要刷新一下 重新计算高度
+    //   refresh()
+    // }
+    // this.$bus.$on('itemiamgeload',this.detailItemlisten)
+    /*********************************************************使用mixin混入 */
+  },
+  destroyed(){   //离开时，取消全局监听，防止刷新图片时home也刷新
+    this.$bus.$off('itemiamgeload',this.itemImgListener)
   }
 }
 </script>

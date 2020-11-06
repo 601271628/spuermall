@@ -45,7 +45,7 @@ import FeatureView from './childComps/FeatureView'  //本周新品
 import {gethomerequest,getHomeGoods} from 'network/homerequest'
 
 import {debounce} from 'common/utils'
-
+import {itemListenrMixin} from 'common/mixin' //混入的内容   mixins:[itemListenrMixin]
 
 // import Swiper from 'components/common/swiper/Swiper'   <!--封装到views/home/home.vue-->
 // import SwiperItem from 'components/common/swiper/SwiperItem'
@@ -65,6 +65,7 @@ export default {
     Scroll,
     BackTop
   },
+  mixins:[itemListenrMixin],  //把混入的内容方放进来
   data(){
     return {
       banners:[],
@@ -78,7 +79,9 @@ export default {
       isShow:false,
       tabOffsetTop:0,   //tabControl的offsetTop
       isTabFixed:false,
-      saveY:0
+      saveY:0,
+      // homeItemlisten:null
+      itemImgListener:null
     }
   },
   computed:{
@@ -155,6 +158,9 @@ export default {
   deactivated(){
     // this.saveY=this.$refs.scrollref.scroll.y;
     this.saveY=this.$refs.scrollref.getScrollY();
+
+    //离开页面时取消 this.$bus全局事件的监听(防止详情页中的推荐图片刷新时 导致home页面也刷新)
+    this.$bus.$off('itemiamgeload',this.itemImgListener)
   },
   //组件创建完 发送请求要数据
   created(){
@@ -172,10 +178,12 @@ export default {
     //   // if(++count % 30 == 0)
     //     this.$refs.scrollref.scroll.refresh()
     // })
-    const refresh=debounce(this.$refs.scrollref.refresh,500)
-    this.$bus.$on('itemiamgeload',()=>{
-      refresh()
-    })
+        // const refresh=debounce(this.$refs.scrollref.refresh,500)
+        // this.itemImgListener=()=>{  //对监听事件进行保存
+        //   refresh()
+        // }
+        // this.$bus.$on('itemiamgeload',this.itemImgListener)
+        /*********************************************************使用mixin混入 */
   }
 }
 </script>
