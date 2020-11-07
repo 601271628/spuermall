@@ -1,5 +1,5 @@
 export default {
-  cartLenght(state){
+  cartLength(state){
     return state.cartList.length
   }
 }
