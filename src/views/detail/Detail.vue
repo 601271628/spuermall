@@ -138,7 +138,10 @@ export default {
       //2. 商品添加到购物车
       //2.1 this.$store.state.cartList.push(product) 不可这样 这样的话 监听不到数据改变
       //2.2 通过mutation事件 来添加到购物车 就可以监听到数据变化
-      this.$store.commit('addCart',product);
+      //2.3  this.$store. commit('addCart',product); 可以 但是不可区分是添加数量/添加新商品
+      this.$store.dispatch('addCart',product);
+
+      //3.再购物车页面展示商品
     }
   },
   mounted(){    //mixin混入
