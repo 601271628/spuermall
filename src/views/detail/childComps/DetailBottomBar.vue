@@ -4,15 +4,21 @@
 
     <div class="bar-item bar-left">
       <div>
-        <i class="icon service"></i>
+        <!-- <i class="icon service"> -->
+          <img class="icon shop" src="~assets/img/detail/service.svg" style="height:25px ">
+        <!-- </i> -->
         <span class="text">客服</span>
       </div>
       <div>
-        <i class="icon shop"></i>
+        <!-- <i class="icon shop"> -->
+          <img class="icon shop" src="~assets/img/detail/shop.svg" style="height:25px">
+        <!-- </i> -->
         <span class="text">店铺</span>
       </div>
       <div>
-        <i class="icon select"></i>
+        <!-- <i class="icon select"> -->
+           <img class="icon shop" src="~assets/img/detail/collect.svg" style="height:25px ">
+        <!-- </i> -->
         <span class="text">收藏</span>
       </div>
     </div>
@@ -37,7 +43,7 @@ export default {
    background-color:#fff;
 
    position: relative; /*相对自身原来位置 */
-   bottom: 58px;
+   /* bottom: 58px; */
    z-index: 10;
 
    display: flex;
@@ -58,7 +64,7 @@ export default {
    width: 22px;
    height: 22px;
    margin: 10px auto 3px;
-   background-color: red;
+   /* background-color: red; */
  }
  /* .bar-left .service{
    background-position: 0 -54px;
