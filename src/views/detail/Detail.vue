@@ -1,17 +1,18 @@
 <!--  -->
 <template>
   <div id="detail">
-      <detail-nav-bar class="detail-nav"/>
+      <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
       <scroll class="content" ref="scrollref" :probe-type="3" @scroll="scroll">
         <detail-swiper :top-images="topImages"></detail-swiper>
         <detail-base-info :goods="goods"></detail-base-info>
         <detail-shop-info :shop="shops"></detail-shop-info>
-        <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
-        <detail-param-info :paramInfo="paramInfo"></detail-param-info>
-        <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
-        <goods-list :goods="recommends"></goods-list>
+        <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad"></detail-goods-info> <!--图刷新-->
+        <detail-param-info :paramInfo="paramInfo" ref="paramref"></detail-param-info>
+        <detail-comment-info :commentInfo="commentInfo" ref="commentref"></detail-comment-info>
+        <goods-list :goods="recommends" ref="recommendref"></goods-list>
       </scroll>
       <back-top v-show="isShow" @click.native="backtopclick"></back-top> <!--原生组件绑定事件加.native-->
+      <detail-bottom-bar></detail-bottom-bar>
   </div>
 </template>
 
@@ -23,6 +24,7 @@ import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
+import DetailBottomBar from './childComps/DetailBottomBar'
 
 import {getDetail,Goods,Shop,GoodsParam,getRecommend} from 'network/detail'   //导入方法、类
 
@@ -46,7 +48,8 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     GoodsList,
-    BackTop
+    BackTop,
+    DetailBottomBar
   },
   mixins:[itemListenrMixin], //把混入的内容方放进来
   data(){
@@ -61,7 +64,8 @@ export default {
       recommends:[],
       // detailItemlisten:null
       itemImgListener:null,
-      isShow:false
+      isShow:false,
+      themeTopYs:[0]   //数组存放要滚动到 对应的位置[0顶部,参数offsettop,评论offsettop,推荐offsettop]
     }
   },
   created(){
@@ -76,7 +80,6 @@ export default {
       const data=res.result;
       console.log(res);
       this.topImages=data.itemInfo.topImages;          //轮播图
-
       this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services) //商品描述(baseinfo)
       this.shops=new Shop(data.shopInfo)   //商家信息(shopinfo)
       this.detailInfo=data.detailInfo  //店家下面...(goodsinfo)
@@ -93,17 +96,38 @@ export default {
   },
   methods:{
     imageLoad(){   //店家消息下面的 图片需要刷新一下 重新计算高度
-      this.$refs.scrollref.refresh()
-      // debounce(this.$refs.scrollref.refresh,500)
+      this.$refs.scrollref.refresh()//不用防抖了 应为goodsinfo emit只会传一次出来
+      //图片加载完就可以计算offset高度了
+      this.themeTopYs.push(this.$refs.paramref.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.commentref.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.recommendref.$el.offsetTop)
+      // console.log(this.themeTopYs);
     },
     backtopclick(){
       this.$refs.scrollref.scrollTo(0,0,500);
     },
     scroll(position){
+      //1.backtop 的显示与否
       this.isShow = (position.y < -285)
+
+      //2.滚动到指定位置 nav样式改变（如，推荐/参数 字体变红)
+      //0-9262-10004-10199(-number max value)
+      for(let index in this.themeTopYs){
+        index=parseInt(index); //不转换的话 index是字符串
+        if( -position.y >= this.themeTopYs[3] ){
+          this.$refs.nav.currentIndex=3;
+        }                           // 0-9262/ 9262-10004/ 10004-10199
+        else if(-position.y >= this.themeTopYs[index] &&  -position.y < this.themeTopYs[index+1]){
+          this.$refs.nav.currentIndex=index;
+        }
+      }
+    },
+    titleClick(index){
+      // 点击滚动到对应位置 index从DetailNavBar发出来的 （themeTopYs是用来存放对应位置的数组）
+      this.$refs.scrollref.scrollTo(0,-this.themeTopYs[index],300)
     }
   },
-  mounted(){
+  mounted(){    //mixin混入
     // const refresh=debounce(this.$refs.scrollref.refresh,500)
     // this.detailItemlisten=()=>{   //推荐的图片需要刷新一下 重新计算高度
     //   refresh()
