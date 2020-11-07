@@ -12,7 +12,7 @@
         <goods-list :goods="recommends" ref="recommendref"></goods-list>
       </scroll>
       <back-top v-show="isShow" @click.native="backtopclick"></back-top> <!--原生组件绑定事件加.native-->
-      <detail-bottom-bar></detail-bottom-bar>
+      <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -55,8 +55,8 @@ export default {
   data(){
     return {
       iid:null,
-      topImages:[],
-      goods:{},
+      topImages:[], //轮播图
+      goods:{},    //衣服的标题 描述。。。。
       shops:{},
       detailInfo:{},
       paramInfo:{},
@@ -125,6 +125,20 @@ export default {
     titleClick(index){
       // 点击滚动到对应位置 index从DetailNavBar发出来的 （themeTopYs是用来存放对应位置的数组）
       this.$refs.scrollref.scrollTo(0,-this.themeTopYs[index],300)
+    },
+    addToCart(){
+      //1. 点击后获取对应商品的 图片+title+描述desc+价格newprice
+      const product={};
+      product.image=this.topImages[0];
+      product.title=this.goods.title;
+      product.desc=this.goods.desc;
+      product.price=this.goods.realPrice;
+      product.iid=this.iid;
+
+      //2. 商品添加到购物车
+      //2.1 this.$store.state.cartList.push(product) 不可这样 这样的话 监听不到数据改变
+      //2.2 通过mutation事件 来添加到购物车 就可以监听到数据变化
+      this.$store.commit('addCart',product);
     }
   },
   mounted(){    //mixin混入
