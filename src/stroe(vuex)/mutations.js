@@ -12,6 +12,12 @@ export default {
     payload.count++;
   },
   addToCart(state,payload){
+    payload.checked=true;   //购物车默认选中
     state.cartList.push(payload)
+  },
+
+  checkClick(state,payload){
+    console.log('123');
+    payload.checked=!payload.checked
   }
 }

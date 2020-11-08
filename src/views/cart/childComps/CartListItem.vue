@@ -1,22 +1,31 @@
 <!--  -->
 <template>
-  <!-- <div>{{product}}</div> -->
-  <div class="cart-list-item">
 
-    <div class="item-img">
-      <img :src="product.image" alt="">
+  <div class="shop-info">
+
+    <div class="item-selector">
+       <!--商品的checked属性购物车 默认选中 //checkClick点击事件来改变选中状态-->
+      <check-button :is-checked="product.checked" @click.native="checkClick" />
     </div>
-    <div class="item-info">{{product.title}}</div>
-    <div class="item-desc">{{product.desc}}</div>
-    <div class="item-bottom">
-      <div class="left">￥{{product.price}}</div>
-      <div class="right">×{{product.count}}</div>
+
+    <div class="cart-list-item">
+      <div class="item-img">
+        <img :src="product.image" alt="">
+      </div>
+      <div class="item-info">{{product.title}}</div>
+      <div class="item-desc">{{product.desc}}</div>
+      <div class="item-bottom">
+        <div class="left">￥{{product.price}}</div>
+        <div class="right">×{{product.count}}</div>
+      </div>
     </div>
 
   </div>
 </template>
 
 <script>
+import CheckButton from './CheckButton'
+
 export default {
   name:'CartListItem',
   props:{
@@ -25,6 +34,15 @@ export default {
       default(){
         return {}
       }
+    }
+  },
+  components:{
+    CheckButton
+  },
+  methods:{
+    checkClick(){
+      // this.product.checked=!this.product.checked
+      this.$store.commit('checkClick',this.product)//上面的监听不到改变
     }
   }
 }
@@ -36,6 +54,7 @@ export default {
     overflow: hidden;
     margin-bottom: 2px;
     border-bottom: 2px solid rgb(226, 223, 223);
+    margin-left: 20px;
   }
   .item-img{
     height: 100%;
@@ -68,5 +87,11 @@ export default {
   }
   .right{
     margin-right: 8px;
+  }
+  .item-selector{
+    float: left;
+    position: relative;
+    top:50px
+    /* background-color: yellow; */
   }
 </style>
