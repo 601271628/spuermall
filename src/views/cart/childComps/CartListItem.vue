@@ -43,6 +43,15 @@ export default {
     checkClick(){
       // this.product.checked=!this.product.checked
       this.$store.commit('checkClick',this.product)//上面的监听不到改变
+
+      // //改变全选按钮的选中状态 3333333333333333
+      // let count=0;
+      // for(let item of this.$store.getters.cartList){
+      //   if(item.checked == false)
+      //     count++;
+      // }
+      // if(count==0) this.$bus.$emit('checkClick',true)
+      // else this.$bus.$emit('checkClick',false)
     }
   }
 }
@@ -64,6 +73,8 @@ export default {
     margin-top: 2px;
     margin-right: 5px;
     height: 96%;
+
+    border-radius: 5px;
   }
   .item-info{
     height: 23px;

@@ -16,8 +16,24 @@ export default {
     state.cartList.push(payload)
   },
 
-  checkClick(state,payload){
-    console.log('123');
+  checkClick(state,payload){   //改变选中状态
+    // console.log('123');
     payload.checked=!payload.checked
+  },
+
+  selectAll(state){         //444444444444
+    const list=state.cartList
+    let count=list.length
+    for(let item of list){  //全选
+      if(item.checked == false){
+          item.checked=true;
+          count--;
+      }
+    }
+    if(count == list.length){    //全不选
+      for(let item of list){
+        item.checked = false
+      }
+    }
   }
 }
