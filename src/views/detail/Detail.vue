@@ -13,6 +13,7 @@
       </scroll>
       <back-top v-show="isShow" @click.native="backtopclick"></back-top> <!--原生组件绑定事件加.native-->
       <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
+      <toast></toast>   <!--测试-->
   </div>
 </template>
 
@@ -31,6 +32,7 @@ import {getDetail,Goods,Shop,GoodsParam,getRecommend} from 'network/detail'   //
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 import BackTop from 'components/content/backTop/BackTop'
+import Toast from 'components/content/toast/Toast'
 
 import {debounce} from 'common/utils' //防抖
 
@@ -49,7 +51,8 @@ export default {
     DetailCommentInfo,
     GoodsList,
     BackTop,
-    DetailBottomBar
+    DetailBottomBar,
+    Toast
   },
   mixins:[itemListenrMixin], //把混入的内容方放进来
   data(){
@@ -65,7 +68,7 @@ export default {
       // detailItemlisten:null
       itemImgListener:null,
       isShow:false,
-      themeTopYs:[0]   //数组存放要滚动到 对应的位置[0顶部,参数offsettop,评论offsettop,推荐offsettop]
+      themeTopYs:[0],   //数组存放要滚动到 对应的位置[0顶部,参数offsettop,评论offsettop,推荐offsettop]
     }
   },
   created(){
@@ -139,7 +142,15 @@ export default {
       //2.1 this.$store.state.cartList.push(product) 不可这样 这样的话 监听不到数据改变
       //2.2 通过mutation事件 来添加到购物车 就可以监听到数据变化
       //2.3  this.$store. commit('addCart',product); 可以 但是不可区分是添加数量/添加新商品
-      this.$store.dispatch('addCart',product);
+      this.$store.dispatch('addCart',product).then((res)=>{
+        // this.message=res,
+        // this.isShowtotas=true,
+        // //2秒后 让toast不显示
+        // setTimeout(()=>{
+        //   this.isShowtotas=false
+        // },2000)
+        this.$toast.show(res,2000);
+      });
 
       //3.再购物车页面展示商品
     }

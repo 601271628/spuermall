@@ -2,31 +2,31 @@
 <template>
   <div class="cart-bottom-bar">
     <check-button class="bottom-check totop" :is-checked="isSelectAll" @click.native="selectAll"/>
-    <!-- @click.native="selectAll" :isChecked="Allchecked" -->
     <span class="totop">全选</span>
 
     <span class="bottom-center totop">合计:￥{{totalPrice}}</span>
 
-    <div class="bottom-right">去计算({{cartLength}})</div>
+    <div class="bottom-right" @click="calcClick">去计算({{isCheckedLength}})</div>
   </div>
 </template>
 
 <script>
 import CheckButton from './CheckButton'
-import {mapGetters} from 'vuex'
+// import {mapGetters} from 'vuex'
 
 export default {
   name:'CartBottomBar',
-  // data(){
-  //   return {
-  //     Allchecked:true
-  //   }
-  // },
   components:{
     CheckButton
   },
   computed:{
-    ...mapGetters(['cartLength']),
+    //算勾选的长度
+    // ...mapGetters(['cartLength']),
+    isCheckedLength(){
+      return this.$store.state.cartList.filter(item => item.checked).length
+    },
+
+    //算价钱
     totalPrice(){
       const cartList =this.$store.state.cartList
       let totalprice=0;
@@ -57,6 +57,11 @@ export default {
       //   }
       // }
       // this.Allchecked=!Boolean(count)
+    },
+    calcClick(){
+      if(!this.isSelectAll){
+        this.$toast.show('请选择购买的商品',2000)
+      }
     }
   },
   // mounted(){         22222222222222（联合cartitemlist中emit事件）
