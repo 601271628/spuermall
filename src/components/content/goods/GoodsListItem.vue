@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="showImage" @load="iamgeLoad"> <!--iamgeLoad事件时图片load加载完 进行refresh-->
+    <img v-lazy="showImage" @load="iamgeLoad"> <!--iamgeLoad事件时图片load加载完 进行refresh-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
