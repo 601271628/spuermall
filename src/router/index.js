@@ -5,6 +5,8 @@ const category=()=>import ('views/category/category.vue')
 const cart=()=>import ('views/cart/cart.vue')
 const profile=()=>import ('views/profile/profile.vue')
 const Detail=()=>import('views/detail/Detail.vue')
+const btn1=()=>import('views/category/childComps/btn1.vue')
+const btn2=()=>import('views/category/childComps/btn2.vue')
 Vue.use(Router)
 
 const router= new Router({
@@ -27,7 +29,21 @@ const router= new Router({
       component:category,
       meta:{
         title:'分类'
-      }
+      },
+      children:[
+        // {
+        //   path:'',
+        //   redirect:'/category/btn1'
+        // },
+        {
+          path:'btn1',
+          component:btn1
+        },
+        {
+          path:'btn2',
+          component:btn2
+        }
+      ]
     },
     {
       path:'/cart',

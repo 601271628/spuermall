@@ -25,7 +25,7 @@ Vue.use(Vuelazy)
 // })
 
 //解决移动端延迟300ms
-Fastclick.attach(document.body)
+// Fastclick.attach(document.body)
 
 
 new Vue({

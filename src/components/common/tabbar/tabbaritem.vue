@@ -20,7 +20,6 @@ export default {
   },
   computed:{
     isShow(){
-      // console.log('aaaaa');
       return (this.$route.path == this.path)/************************************ */
     },
     activeStyle(){
