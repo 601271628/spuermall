@@ -1,3 +1,5 @@
+
+
 export function debounce(func,delay){ //防抖
   let timer=null
   return function(...args){
