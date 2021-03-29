@@ -112,6 +112,7 @@ export default {
       this.$refs.scrollref.scrollTo(0,0,500)
     },
     scroll(position){
+      console.log(position);
       //1.判断backto是否显示
       // if(position.y > -285 ){this.isShow=false} else this.isShow=true   下面简写
       this.isShow = (position.y < -285)
