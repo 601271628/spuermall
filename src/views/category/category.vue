@@ -158,7 +158,6 @@ export default {
       overflow: hidden;
   }
   .right{
-    /* float: right; */
     position: fixed;
     top: 50px;
     right: 0;
